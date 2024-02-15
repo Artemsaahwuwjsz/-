@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Онлайн магазин</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--tg-theme-text-color);
+            background: var(--tg-theme-bg-color);
+        }
+
+        #main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        img {
+            display: block;
+            margin: 0 auto 20px;
+            max-width: 100%;
+            height: auto;
+        }
+
+        p {
+            text-align: center;
+            color: #666;
+        }
+
+        button {
+            display: block;
+            margin: 0 auto;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Стили для формы */
+        #form {
+            display: none;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        #form input[type="text"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        #order {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        #order:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+<div id="main">
+    <h1>Онлайн магазин</h1>
+    <img src="https://sitechecker.pro/wp-content/uploads/2023/05/URL-meaning.jpg" alt="Магазин">
+    <p>Добро пожаловать в наш магазин! Здесь вы найдете все, что вам нужно.</p>
+    <button id="buy">Купить</button>
+</div>
+<form id="form">
+    <input type="text" placeholder="Имя" id="user_name">
+    <input type="text" placeholder="Email" id="user_email">
+    <input type="text" placeholder="Телефон" id="user_phone">
+    <div id="error"></div>
+    <button id="order">Оформить</button>
+</form>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script>
+    let tg = window.Telegram.WebApp;
+    let buy = document.getElementById("buy");
+    let order = document.getElementById("order");
+    tg.expand();
+
+    buy.addEventListener("click", () =>{
+        document.getElementById("main").style.display = "none";
+        document.getElementById("form").style.display = "block";
+        document.getElementById("user_name").value = tg.initDataUnsafe.user.first_name + " " + tg.initDataUnsafe.user.first_name;
+    });
+
+    order.addEventListener("click", () =>{
+        document.getElementById("error").innerText = '';
+        let name = document.getElementById("user_name").value;
+        let email = document.getElementById("user_email").value;
+        let phone = document.getElementById("user_phone").value;
+        if(name.length < 1) {
+            document.getElementById("error").innerText = "Ошибка в имени";
+            return;
+        }
+        if(email.length < 5) {
+            document.getElementById("error").innerText = "Ошибка в email";
+            return;
+        }
+        if(phone.length < 8) {
+            document.getElementById("error").innerText = "Ошибка в номере";
+            return;
+        }
+
+        let data = {
+            name: name,
+            email: email,
+            phone: phone
+
+        }
+        tg.sendData(JSON.stringify(data));
+        tg.sendData('');
+
+
+
+        tg.close();
+    });
+
+
+
+
+</script>
+</body>
+</html>
